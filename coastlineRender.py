@@ -24,7 +24,6 @@ class GeoDataLoader:
             if geom_type == "LineString":
                 self._process_line(coords)
 
-
         return self.lines
 
     def _process_line(self, line: list):
@@ -87,7 +86,6 @@ class CoordinateMapper:
 
 
 class DisplayManager:
-    """Manages Pygame window initialization and vector coastline rendering."""
 
     BG_COLOR = (0, 0, 0)
     COAST_COLOR = (255, 255, 255)
@@ -114,12 +112,17 @@ class DisplayManager:
                     self.screen, self.COAST_COLOR, False, line, line_width
                 )
 
+    def draw_ship(self, s):
+        if s is not None:
+            pygame.draw.circle(self.screen, "red", (s.x, s.y), 5)
+
     def refresh(self):
         pygame.display.flip()
 
 class ship:
-
-    def __init__(self, draft, beam, LOA, heading, speed):
+    def __init__(self, x_coord, y_coord, draft, beam, LOA, heading, speed):
+        self.x = x_coord
+        self.y = y_coord
         self.draft = draft
         self.beam = beam
         self.LOA = LOA
@@ -147,32 +150,35 @@ class ship:
         if self.speed < 0:
             self.speed = 0
 
+
 if __name__ == "__main__":
     SCREEN_WIDTH = 800
     SCREEN_HEIGHT = 800
 
-    # 1. Load raw data once
     loader = GeoDataLoader("coastline.geojson")
     raw_lines = loader.load()
-
-    # 2. Map raw data to screen pixels once
     mapper = CoordinateMapper(loader.bounds, SCREEN_WIDTH, SCREEN_HEIGHT)
     pixel_lines = mapper.map_lines(raw_lines)
 
-    # 3. Pass mapped render data directly to display manager
     display = DisplayManager(pixel_lines, SCREEN_WIDTH, SCREEN_HEIGHT)
     clock = pygame.time.Clock()
+
+    player_ship = None
 
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1: 
+                    mouse_x, mouse_y = event.pos
+                    player_ship = ship(mouse_x, mouse_y, draft=8, beam=35.5, LOA=290, heading=0, speed=0)
 
         display.clear()
         display.draw_coastline()
+        display.draw_ship(player_ship)
         display.refresh()
+        
         clock.tick(60)
-
-    pygame.quit()
-    sys.exit()
