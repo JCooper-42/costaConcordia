@@ -60,7 +60,7 @@ class CoordinateMapper:
         lat_range = self.max_lat - self.min_lat
 
         usable_width = width - (padding * 2)
-        usable_height = height - (padding * 2)
+        usable_height = height - (padding * 10)
 
         scale_x = usable_width / lon_range if lon_range > 0 else 1
         scale_y = usable_height / lat_range if lat_range > 0 else 1
@@ -117,6 +117,35 @@ class DisplayManager:
     def refresh(self):
         pygame.display.flip()
 
+class ship:
+
+    def __init__(self, draft, beam, LOA, heading, speed):
+        self.draft = draft
+        self.beam = beam
+        self.LOA = LOA
+        self.heading = heading
+        self.speed = speed
+        self.isAground = False
+
+    def turnPort(self, angle):
+        self.heading -= angle
+        if self.heading < 0:
+            self.heading += 360
+
+    def turnStarboard(self, angle):
+        self.heading += angle
+        if self.heading >= 360:
+            self.heading -= 360
+
+    def accelerate(self, deltaSpeed):
+        self.speed += deltaSpeed
+        if self.speed < 0:
+            self.speed = 0
+
+    def decelerate(self, deltaSpeed):
+        self.speed -= deltaSpeed
+        if self.speed < 0:
+            self.speed = 0
 
 if __name__ == "__main__":
     SCREEN_WIDTH = 800
