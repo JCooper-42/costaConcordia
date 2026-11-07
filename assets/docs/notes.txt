@@ -1,0 +1,21 @@
+> First problem was working out where the ship started relative to the island. 
+    > I used a bit of guestimation using images from 2012concordia.pdf radar 
+    > Built a class using pygame to be able to click on to the map and put a boat there
+
+> Second problem is trying to model the ships movement accuratly
+    > I used AI to make a VDR data CSV, and put this as a constant at the top of the tile
+    > I then made the ship move forward and then turn by the degree given in the CSV
+
+> Third problem, scaling
+
+Results:
+Ships starting WEST of this longitude for a given latitude are bound to collide:
+  Latitude 42.3205°N  -->  Critical Longitude: 10.9662°E
+  Latitude 42.3263°N  -->  Critical Longitude: 10.9675°E
+  Latitude 42.3321°N  -->  Critical Longitude: 10.9664°E
+  Latitude 42.3379°N  -->  Critical Longitude: 10.9634°E
+  Latitude 42.3438°N  -->  Critical Longitude: 10.9627°E
+  Latitude 42.3496°N  -->  Critical Longitude: 10.9587°E
+  Latitude 42.3554°N  -->  Critical Longitude: 10.9565°E
+  Latitude 42.3612°N  -->  Critical Longitude: 10.9514°E
+  Latitude 42.3670°N  -->  Critical Longitude: 10.9427°E
